@@ -35,16 +35,17 @@ sur la ligne `inet` se trouvent l'**adresse IP** et le **masque** (après le `/`
 
 | Information        | Valeur pour le client |
 | ------------------ | --------------------- |
-| Nom de l'interface | …                     |
-| Adresse MAC        | …                     |
-| Adresse IP         | …                     |
-| Masque (notation `/`) | …                  |
-| Adresse du réseau  | …                     |
+| Nom de l'interface | eth0                  |
+| Adresse MAC        | 72:40:01:ab:5a:a7     |
+| Adresse IP         | 172.20.1.50           |
+| Masque (notation `/`) | /24                |
+| Adresse du réseau  | 172.20.1.0            |
 
 **Question A.2.** Le masque est `/24`. Combien de machines différentes peut-on placer dans ce réseau ?
 (Indice : le dernier nombre de l'adresse peut varier de 0 à 255, mais 2 valeurs sont réservées.)
 
-> 💬 **Votre réponse :**
+> 💬 **Votre réponse : Le masque est `/24`. Combien de machines différentes peut-on placer dans ce réseau ?
+(Indice : le dernier nombre de l'adresse peut varier de 0 à 255, mais 2 valeurs sont réservées.)
 >
 > _Remplacez ce texte par votre réponse._
 
@@ -63,7 +64,7 @@ ip route
 
 **Question A.3.** Quelle est l'adresse de la passerelle du client ? À quelle machine du lab correspond-elle ?
 
-> 💬 **Votre réponse :**
+> 💬 **Votre réponse : L'adresse de la passerelle du client est 172.20.1.254. Elle correspond au routeur NAT (nat-router) du laboratoire, qui permet au client de communiquer avec les autres réseaux et Internet.
 >
 > _Remplacez ce texte par votre réponse._
 
@@ -102,7 +103,7 @@ ip neigh
 **Question B.1.** Quelle nouvelle ligne est apparue ? Que contient-elle ? Pourquoi le client a-t-il
 eu besoin de cette information **avant** de pouvoir envoyer le ping ?
 
-> 💬 **Votre réponse :**
+> 💬 **Votre réponse : Une nouvelle ligne est apparue dans la table ARP avec l'adresse IP 172.20.1.2, l'adresse MAC du serveur DHCP et l'interface eth0 Le client a besoin de cette information pour connaître l'adresse MAC correspondant à l'adresse IP du serveur. Cela lui permet d'envoyer les données au bon ordinateur sur le réseau local.
 >
 > _Remplacez ce texte par votre réponse._
 
@@ -119,7 +120,7 @@ ip neigh
 **Question B.2.** Cette fois, le client n'a **pas** appris la MAC de `172.20.0.10`. De quelle IP
 a-t-il appris la MAC ? Expliquez pourquoi, en vous aidant de la fiche théorique.
 
-> 💬 **Votre réponse :**
+> 💬 **Votre réponse : Le client a appris l'adresse MAC de la passerelle 172.20.1.254 et non celle du serveur 172.20.0.10. En effet, le serveur se trouve sur un autre réseau. Le client doit donc passer par le routeur (passerelle) pour lui envoyer les données. Il utilise ARP pour trouver l'adresse MAC de cette passerelle.
 >
 > _Remplacez ce texte par votre réponse._
 
@@ -139,7 +140,7 @@ ping -c 2 172.20.0.10
 **Question C.1.** Notez le TTL des réponses dans les deux cas. Sont-ils identiques ? Que signifie
 cette différence ? (Indice : chaque routeur traversé diminue le TTL de 1.)
 
-> 💬 **Votre réponse :**
+> 💬 **Votre réponse : Le TTL du routeur 172.20.1.254 est de 64 et celui du site web 172.20.0.10 est de 63. Ils ne sont pas identiques. Cela signifie qu'un routeur a été traversé pour atteindre le site web, car chaque routeur traversé diminue le TTL de 1.
 >
 > _Remplacez ce texte par votre réponse._
 
@@ -156,7 +157,8 @@ traceroute -n 172.20.0.10
 **Question C.2.** Combien de sauts y a-t-il ? Quelle est l'adresse du premier saut ?
 Dessinez (en texte) le chemin suivi : `client → … → internet`.
 
-> 💬 **Votre réponse :**
+> 💬 **Votre réponse : Il y a 2 sauts pour atteindre le site web. Le premier saut a pour adresse IP 172.20.1.254. C'est le routeur (passerelle).
+Le chemin suivi est : Client → Routeur (172.20.1.254) → Internet (172.20.0.10)
 >
 > _Remplacez ce texte par votre réponse._
 
@@ -170,7 +172,7 @@ ping -c 2 -W 2 8.8.8.8
 
 **Question C.3.** Que se passe-t-il ? Pourquoi, selon vous ? (Pensez à ce qu'il y a derrière le routeur du lab.)
 
-> 💬 **Votre réponse :**
+> 💬 **Votre réponse : Le ping vers 8.8.8.8 échoue. On obtient le message « Destination Net Unreachable » et 100 % de perte de paquets. Cela signifie que le routeur du laboratoire (172.20.1.254) ne trouve pas de chemin vers Internet. Le laboratoire est isolé et ne permet donc pas de communiquer avec les vrais serveurs Internet.
 >
 > _Remplacez ce texte par votre réponse._
 
@@ -182,16 +184,16 @@ ping -c 2 -W 2 8.8.8.8
 
 | Notion        | Explication en une phrase |
 | ------------- | ------------------------- |
-| Adresse IP    | …                         |
-| Adresse MAC   | …                         |
-| Passerelle    | …                         |
-| ARP           | …                         |
-| TTL           | …                         |
+| Adresse IP    | C'est l'adresse qui permet d'identifier une machine sur un réseau.|
+| Adresse MAC   | C'est l'identifiant de la carte réseau d'un appareil.|
+| Passerelle    | C'est le routeur qui permet de communiquer avec d'autres réseaux.|
+| ARP           | C'est un protocole qui permet de trouver l'adresse MAC correspondant à une adresse IP.|
+| TTL           | C'est une valeur qui diminue à chaque routeur traversé pour éviter que les paquets circulent indéfiniment.|
 
 **Question D.2.** Vrai ou faux ? Justifiez : « Pour envoyer un paquet à `172.20.0.10`, le client met
 dans la trame la MAC de `172.20.0.10`. »
 
-> 💬 **Votre réponse :**
+> 💬 **Votre réponse : Faux. Pour envoyer un paquet à 172.20.0.10, qui se trouve sur un autre réseau, le client utilise l'adresse MAC de sa passerelle (172.20.1.254) et non celle de la machine de destination. C'est le routeur qui se charge ensuite de transmettre le paquet vers le réseau distant.
 >
 > _Remplacez ce texte par votre réponse._
 
